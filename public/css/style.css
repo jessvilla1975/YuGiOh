@@ -1,0 +1,190 @@
+body {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    min-height: 100vh;
+    color: white;
+}
+
+.duel-container {
+    margin-top: 2rem;
+}
+
+.card-yugioh {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 10px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.card-yugioh:hover:not(.used) {
+    transform: translateY(-10px);
+    border-color: gold;
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+}
+
+.card-yugioh.selected {
+    border-color: #00ff00;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+}
+
+.card-yugioh.machine-selected {
+    border-color: #ff0000;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+}
+
+.card-yugioh.used {
+    opacity: 0.3;
+    cursor: not-allowed;
+    filter: grayscale(100%);
+}
+
+.card-image {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.stat-badge {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 3px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.atk-stat {
+    color: #ff6b6b;
+}
+
+.def-stat {
+    color: #4dabf7;
+}
+
+.player-section {
+    background: rgba(0, 123, 255, 0.2);
+    border: 2px solid #007bff;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.machine-section {
+    background: rgba(220, 53, 69, 0.2);
+    border: 2px solid #dc3545;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.score-board {
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.round-indicator {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 0 5px;
+    border: 3px solid #666;
+    background: rgba(0, 0, 0, 0.5);
+    line-height: 34px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.round-indicator.win {
+    background: #00ff00;
+    border-color: #00ff00;
+    color: #000;
+}
+
+.round-indicator.lose {
+    background: #ff0000;
+    border-color: #ff0000;
+    color: #fff;
+}
+
+.round-indicator.active {
+    border-color: gold;
+    animation: pulse-border 1s infinite;
+}
+
+@keyframes pulse-border {
+    0%, 100% { box-shadow: 0 0 10px gold; }
+    50% { box-shadow: 0 0 20px gold; }
+}
+
+.battle-log {
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.log-entry {
+    padding: 8px;
+    margin: 5px 0;
+    border-left: 3px solid gold;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.attribute-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.btn-duel {
+    background: linear-gradient(135deg, gold, #ffd700);
+    color: #000;
+    font-weight: bold;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-duel:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px gold;
+}
+
+.winner-announcement {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #000;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 20px 0;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.current-round {
+    font-size: 1.5rem;
+    color: gold;
+    text-align: center;
+    margin: 20px 0;
+    font-weight: bold;
+}

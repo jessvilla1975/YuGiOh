@@ -23,7 +23,9 @@ class App extends BaseConfig
 	| environments.
 	*/
 
-	public $baseURL = 'https://localhost/porcolDev/';
+	public $baseURL = 'https://localhost/YuGiOh/';
+
+
 
 	/*
 	|--------------------------------------------------------------------------

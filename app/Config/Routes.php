@@ -30,10 +30,9 @@ $routes->setAutoRoute(true);
  */
 
 
-//***************************Rutas Pokédex************************************** */
-//***************************Rutas Pokédex************************************** */
-$routes->get('/pokedex', 'PokedexController::index');
-$routes->post('/pokedex/buscar', 'PokedexController::buscarPokemon');
+//***************************Rutas Duelo Yu-Gi-Oh!************************************** */
+$routes->get('/yugioh', 'YugiohDuelController::index');
+$routes->post('/yugioh/iniciar', 'YugiohDuelController::iniciarDuelo');
 /**
  * --------------------------------------------------------------------
  * Additional Routing

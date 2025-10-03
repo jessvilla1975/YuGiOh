@@ -1,3 +1,4 @@
+// Variables globales
 let cartasJugador = [];
 let cartasMaquina = [];
 let cartaSeleccionadaJugador = null;
@@ -8,20 +9,38 @@ let victoriasMaquina = 0;
 let rondaActual = 1;
 let juegoTerminado = false;
 
-document.getElementById('btnIniciarDuelo').addEventListener('click', iniciarDuelo);
-document.getElementById('btnAtacar').addEventListener('click', realizarBatalla);
+// Crear partículas decorativas
+function crearParticulas() {
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 15 + 's';
+        particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+        container.appendChild(particle);
+    }
+}
+
+// Inicializar partículas al cargar
+crearParticulas();
+
+// Event Listeners
+document.getElementById('btnStart').addEventListener('click', iniciarDuelo);
+document.getElementById('btnBattle').addEventListener('click', realizarBatalla);
 
 function iniciarDuelo() {
     const loading = document.getElementById('loading');
     loading.style.display = 'block';
     
-    // limpiar
-    document.getElementById('machineSection').style.display = 'none';
-    document.getElementById('playerSection').style.display = 'none';
-    document.getElementById('vsSection').style.display = 'none';
+    // Limpiar y ocultar secciones
+    document.getElementById('battleArea').style.display = 'none';
+    document.getElementById('scoreboard').style.display = 'none';
+    document.getElementById('vsDivider').style.display = 'none';
     document.getElementById('battleLog').style.display = 'none';
     document.getElementById('winnerAnnouncement').style.display = 'none';
-    document.getElementById('scoreBoard').style.display = 'none';
+    
+    // Resetear variables
     victoriasJugador = 0;
     victoriasMaquina = 0;
     rondaActual = 1;
@@ -31,6 +50,7 @@ function iniciarDuelo() {
     cartasUsadasMaquina = [];
     document.getElementById('logContent').innerHTML = '';
 
+    // Llamada al servidor
     fetch('/YuGiOh/yugioh/iniciar', {
         method: 'POST',
         headers: {
@@ -47,14 +67,13 @@ function iniciarDuelo() {
             cartasMaquina = data.maquina;
             
             mostrarCartas();
-            document.getElementById('machineSection').style.display = 'block';
-            document.getElementById('playerSection').style.display = 'block';
-            document.getElementById('vsSection').style.display = 'block';
+            document.getElementById('battleArea').style.display = 'block';
+            document.getElementById('scoreboard').style.display = 'block';
+            document.getElementById('vsDivider').style.display = 'block';
             document.getElementById('battleLog').style.display = 'block';
-            document.getElementById('scoreBoard').style.display = 'block';
             
             actualizarMarcador();
-            addLog('¡El duelo ha comenzado! Mejor de 3 rondas. ¡Selecciona tu carta!');
+            agregarLog('¡El duelo ha comenzado! Mejor de 3 rondas. ¡Selecciona tu carta!');
         } else {
             alert('Error: ' + data.error);
         }
@@ -67,57 +86,56 @@ function iniciarDuelo() {
 }
 
 function mostrarCartas() {
-    const jugadorContainer = document.getElementById('cartasJugador');
+    // Mostrar cartas del jugador
+    const jugadorContainer = document.getElementById('playerCards');
     jugadorContainer.innerHTML = '';
     
     cartasJugador.forEach((carta, index) => {
         const usada = cartasUsadasJugador.includes(index);
-        jugadorContainer.innerHTML += crearCartaHTML(carta, index, 'jugador', usada);
+        jugadorContainer.innerHTML += crearCartaHTML(carta, index, 'player', usada);
     });
 
-    const maquinaContainer = document.getElementById('cartasMaquina');
+    // Mostrar cartas de la máquina
+    const maquinaContainer = document.getElementById('machineCards');
     maquinaContainer.innerHTML = '';
     
     cartasMaquina.forEach((carta, index) => {
         const usada = cartasUsadasMaquina.includes(index);
-        maquinaContainer.innerHTML += crearCartaHTML(carta, index, 'maquina', usada);
+        maquinaContainer.innerHTML += crearCartaHTML(carta, index, 'machine', usada);
     });
 
     // Agregar eventos de click a las cartas del jugador
-    document.querySelectorAll('.carta-jugador:not(.used)').forEach(carta => {
+    document.querySelectorAll('.card-player:not(.used)').forEach(carta => {
         carta.addEventListener('click', function() {
             if (juegoTerminado) return;
             
-            document.querySelectorAll('.carta-jugador').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll('.card-player').forEach(c => c.classList.remove('selected'));
             this.classList.add('selected');
             cartaSeleccionadaJugador = parseInt(this.dataset.index);
-            document.getElementById('btnAtacar').disabled = false;
+            document.getElementById('btnBattle').disabled = false;
         });
     });
 }
 
 function crearCartaHTML(carta, index, tipo, usada = false) {
-    const atributoColor = getAttributeColor(carta.attribute);
+    const atributoColor = obtenerColorAtributo(carta.attribute);
     const usedClass = usada ? 'used' : '';
     
     return `
-        <div class="col-md-4">
-            <div class="card-yugioh carta-${tipo} ${usedClass}" data-index="${index}">
-                <div style="position: relative;">
-                    <span class="attribute-badge" style="background: ${atributoColor};">
-                        ${carta.attribute || 'N/A'}
-                    </span>
-                    <img src="${carta.image_url_small}" alt="${carta.name}" class="card-image">
-                </div>
-                <h6 class="text-center" style="color: gold;">${carta.name}</h6>
-                <div class="text-center">
-                    <span class="stat-badge atk-stat">ATK: ${carta.atk}</span>
-                    <span class="stat-badge def-stat">DEF: ${carta.def}</span>
-                </div>
-                <div class="text-center mt-2">
-                    <small style="color: #aaa;">⭐ Nivel ${carta.level}</small><br>
-                    <small style="color: #ccc;">${carta.race}</small>
-                </div>
+        <div class="card card-${tipo} ${usedClass}" data-index="${index}">
+            <div class="attribute-badge" style="background: ${atributoColor};">
+                ${carta.attribute || 'N/A'}
+            </div>
+            <img src="${carta.image_url_small}" alt="${carta.name}" class="card-image" 
+                 onerror="this.src='https://via.placeholder.com/200x280/1a1a2e/ffd700?text=Yu-Gi-Oh'">
+            <div class="card-name">${carta.name}</div>
+            <div class="card-stats">
+                <div class="stat atk">ATK: ${carta.atk}</div>
+                <div class="stat def">DEF: ${carta.def}</div>
+            </div>
+            <div class="card-info">
+                ⭐ Nivel ${carta.level}<br>
+                ${carta.race}
             </div>
         </div>
     `;
@@ -128,13 +146,13 @@ function realizarBatalla() {
 
     const cartaJugador = cartasJugador[cartaSeleccionadaJugador];
     
-    // La maquina elige una carta aleatoria que no haya usado
+    // La máquina elige una carta aleatoria que no haya usado
     const cartasDisponiblesMaquina = cartasMaquina
         .map((carta, index) => ({carta, index}))
         .filter(item => !cartasUsadasMaquina.includes(item.index));
     
     if (cartasDisponiblesMaquina.length === 0) {
-        addLog('¡Error! La maquina no tiene cartas disponibles.', 'danger');
+        agregarLog('¡Error! La máquina no tiene cartas disponibles.', 'danger');
         return;
     }
 
@@ -146,15 +164,15 @@ function realizarBatalla() {
     cartasUsadasJugador.push(cartaSeleccionadaJugador);
     cartasUsadasMaquina.push(indiceMaquina);
 
-    // Resaltar cartas seleccionadas
-    document.querySelectorAll('.carta-maquina').forEach((c, i) => {
+    // Resaltar carta seleccionada por la máquina
+    document.querySelectorAll('.card-machine').forEach((c, i) => {
         c.classList.remove('machine-selected');
         if (i === indiceMaquina) {
             c.classList.add('machine-selected');
         }
     });
 
-    addLog(`RONDA ${rondaActual}: ${cartaJugador.name} (ATK: ${cartaJugador.atk}) VS ${cartaMaquina.name} (ATK: ${cartaMaquina.atk})`);
+    agregarLog(`RONDA ${rondaActual}: ${cartaJugador.name} (ATK: ${cartaJugador.atk}) VS ${cartaMaquina.name} (ATK: ${cartaMaquina.atk})`);
 
     setTimeout(() => {
         let ganadorRonda = '';
@@ -162,31 +180,31 @@ function realizarBatalla() {
         if (cartaJugador.atk > cartaMaquina.atk) {
             victoriasJugador++;
             ganadorRonda = 'jugador';
-            addLog(`¡El JUGADOR gana la ronda ${rondaActual}!`, 'success');
+            agregarLog(`¡El JUGADOR gana la ronda ${rondaActual}!`, 'success');
         } else if (cartaMaquina.atk > cartaJugador.atk) {
             victoriasMaquina++;
             ganadorRonda = 'maquina';
-            addLog(`¡La maquina gana la ronda ${rondaActual}!`, 'danger');
+            agregarLog(`¡La MÁQUINA gana la ronda ${rondaActual}!`, 'danger');
         } else {
             // En caso de empate, gana quien tenga mayor DEF
             if (cartaJugador.def > cartaMaquina.def) {
                 victoriasJugador++;
                 ganadorRonda = 'jugador';
-                addLog(`¡Empate en ATK! El JUGADOR gana por DEF (${cartaJugador.def} vs ${cartaMaquina.def})`, 'success');
+                agregarLog(`¡Empate en ATK! El JUGADOR gana por DEF (${cartaJugador.def} vs ${cartaMaquina.def})`, 'success');
             } else if (cartaMaquina.def > cartaJugador.def) {
                 victoriasMaquina++;
                 ganadorRonda = 'maquina';
-                addLog(`¡Empate en ATK! La maquina gana por DEF (${cartaMaquina.def} vs ${cartaJugador.def})`, 'danger');
+                agregarLog(`¡Empate en ATK! La MÁQUINA gana por DEF (${cartaMaquina.def} vs ${cartaJugador.def})`, 'danger');
             } else {
-                
-                if (Math.random() > 0.5) { // Empate total - se decide aleatoriamente
+                // Empate total - se decide aleatoriamente
+                if (Math.random() > 0.5) {
                     victoriasJugador++;
                     ganadorRonda = 'jugador';
-                    addLog(`🎲 ¡Empate total! El JUGADOR gana por suerte`, 'success');
+                    agregarLog(`🎲 ¡Empate total! El JUGADOR gana por suerte`, 'success');
                 } else {
                     victoriasMaquina++;
                     ganadorRonda = 'maquina';
-                    addLog(`🎲 ¡Empate total! La maquina gana por suerte`, 'danger');
+                    agregarLog(`🎲 ¡Empate total! La MÁQUINA gana por suerte`, 'danger');
                 }
             }
         }
@@ -199,16 +217,16 @@ function realizarBatalla() {
             document.getElementById('currentRound').textContent = `RONDA ${rondaActual}`;
             mostrarCartas();
             cartaSeleccionadaJugador = null;
-            document.getElementById('btnAtacar').disabled = true;
+            document.getElementById('btnBattle').disabled = true;
         }
     }, 1000);
 }
 
 function actualizarMarcador(ganadorUltimaRonda = null) {
-    const indicadoresMaquina = document.querySelectorAll('#rondasMaquina .round-indicator');
-    const indicadoresJugador = document.querySelectorAll('#rondasJugador .round-indicator');
+    const indicadoresMaquina = document.querySelectorAll('#machineRounds .round-dot');
+    const indicadoresJugador = document.querySelectorAll('#playerRounds .round-dot');
 
-    // actualiza indicadores
+    // Actualizar indicadores de la máquina
     indicadoresMaquina.forEach((ind, i) => {
         ind.classList.remove('win', 'lose', 'active');
         if (i < victoriasMaquina) {
@@ -220,7 +238,7 @@ function actualizarMarcador(ganadorUltimaRonda = null) {
         }
     });
 
-    // Actualizar indicadores de jugador
+    // Actualizar indicadores del jugador
     indicadoresJugador.forEach((ind, i) => {
         ind.classList.remove('win', 'lose', 'active');
         if (i < victoriasJugador) {
@@ -236,36 +254,48 @@ function actualizarMarcador(ganadorUltimaRonda = null) {
 function verificarGanador() {
     if (victoriasJugador >= 2) {
         juegoTerminado = true;
-        mostrarGanador('¡VICTORIA! ¡GANASTE EL DUELO!', 'success');
-        document.getElementById('btnAtacar').disabled = true;
+        mostrarGanador('¡VICTORIA! ¡GANASTE EL DUELO! 🏆', 'success');
+        document.getElementById('btnBattle').disabled = true;
     } else if (victoriasMaquina >= 2) {
         juegoTerminado = true;
-        mostrarGanador('LA maquina GANÓ EL DUELO', 'danger');
-        document.getElementById('btnAtacar').disabled = true;
+        mostrarGanador('LA MÁQUINA GANÓ EL DUELO 💀', 'danger');
+        document.getElementById('btnBattle').disabled = true;
     }
 }
 
 function mostrarGanador(mensaje, tipo) {
     const announcement = document.getElementById('winnerAnnouncement');
-    announcement.innerHTML = mensaje;
-    announcement.className = 'winner-announcement alert alert-' + tipo;
+    announcement.textContent = mensaje;
     announcement.style.display = 'block';
-    addLog('═══════════════════════════════');
-    addLog(mensaje, tipo);
-    addLog('═══════════════════════════════');
+    
+    if (tipo === 'danger') {
+        announcement.style.background = 'linear-gradient(135deg, #ff0000, #ff6b6b)';
+        announcement.style.color = '#fff';
+    }
+    
+    agregarLog('═══════════════════════════════');
+    agregarLog(mensaje, tipo);
+    agregarLog('═══════════════════════════════');
 }
 
-function addLog(mensaje, tipo = 'info') {
+function agregarLog(mensaje, tipo = 'info') {
     const logContent = document.getElementById('logContent');
     const entry = document.createElement('div');
-    entry.className = 'log-entry alert alert-' + tipo;
+    entry.className = 'log-entry';
+    
+    if (tipo === 'success') {
+        entry.classList.add('log-success');
+    } else if (tipo === 'danger') {
+        entry.classList.add('log-danger');
+    }
+    
     entry.textContent = mensaje;
     logContent.appendChild(entry);
     logContent.scrollTop = logContent.scrollHeight;
 }
 
-function getAttributeColor(attribute) {
-    const colors = {
+function obtenerColorAtributo(attribute) {
+    const colores = {
         'DARK': '#8B008B',
         'LIGHT': '#FFD700',
         'EARTH': '#8B4513',
@@ -274,5 +304,5 @@ function getAttributeColor(attribute) {
         'WIND': '#00CED1',
         'DIVINE': '#FFD700'
     };
-    return colors[attribute] || '#666';
+    return colores[attribute] || '#666';
 }

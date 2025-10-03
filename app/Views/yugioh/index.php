@@ -19,14 +19,14 @@
         </div>
 
         <!-- Botón Inicio -->
-        <div style="text-align: center; margin-bottom: 40px;">
+        <div style="text-align: center; margin-bottom: 10px;">
             <button class="start-btn" id="btnStart">⚡ Iniciar Duelo ⚡</button>
         </div>
 
         <!-- Loading -->
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p style="font-size: 1.5rem; color: #ffd700;">Invocando cartas...</p>
+            <p style="font-size: 1.2rem; color: #ffd700;">Invocando cartas...</p>
         </div>
 
         <!-- Winner Announcement -->
@@ -57,29 +57,30 @@
 
         <!-- Battle Area -->
         <div class="battle-area" id="battleArea">
-            <!-- Machine Section -->
-            <div class="section machine-section">
-                <h2 class="section-title">🤖 Cartas de la Máquina</h2>
-                <div class="cards-grid" id="machineCards"></div>
-            </div>
+            <div class="battle-grid">
+                <!-- Machine Section -->
+                <div class="section machine-section">
+                    <h2 class="section-title">🤖 Cartas de la Máquina</h2>
+                    <div class="cards-grid" id="machineCards"></div>
+                </div>
 
-            <!-- VS Divider -->
-            <div class="vs-divider" id="vsDivider">
-                <div class="vs-text">⚔️ VS ⚔️</div>
-            </div>
+                <!-- Player Section -->
+                <div class="section player-section">
+                    <h2 class="section-title">👤 Tus Cartas</h2>
+                    <div class="cards-grid" id="playerCards"></div>
+                </div>
 
-            <!-- Player Section -->
-            <div class="section player-section">
-                <h2 class="section-title">👤 Tus Cartas</h2>
-                <div class="cards-grid" id="playerCards"></div>
-                <button class="battle-btn" id="btnBattle" disabled>⚔️ Atacar ⚔️</button>
+                <!-- Battle Button (debajo de ambos mazos) -->
+                <div class="battle-btn-container">
+                    <button class="battle-btn" id="btnBattle" disabled>⚔️ Atacar ⚔️</button>
+                </div>
             </div>
         </div>
 
         <!-- Battle Log -->
         <div class="battle-log" id="battleLog">
             <div class="log-title">📜 Registro de Batalla</div>
-            <div id="logContent"></div>
+            <div class="log-content-wrapper" id="logContent"></div>
         </div>
     </div>
 

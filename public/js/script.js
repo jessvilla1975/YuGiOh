@@ -36,7 +36,6 @@ function iniciarDuelo() {
     // Limpiar y ocultar secciones
     document.getElementById('battleArea').style.display = 'none';
     document.getElementById('scoreboard').style.display = 'none';
-    document.getElementById('vsDivider').style.display = 'none';
     document.getElementById('battleLog').style.display = 'none';
     document.getElementById('winnerAnnouncement').style.display = 'none';
     
@@ -69,7 +68,6 @@ function iniciarDuelo() {
             mostrarCartas();
             document.getElementById('battleArea').style.display = 'block';
             document.getElementById('scoreboard').style.display = 'block';
-            document.getElementById('vsDivider').style.display = 'block';
             document.getElementById('battleLog').style.display = 'block';
             
             actualizarMarcador();
@@ -165,12 +163,14 @@ function realizarBatalla() {
     cartasUsadasMaquina.push(indiceMaquina);
 
     // Resaltar carta seleccionada por la máquina
-    document.querySelectorAll('.card-machine').forEach((c, i) => {
-        c.classList.remove('machine-selected');
-        if (i === indiceMaquina) {
-            c.classList.add('machine-selected');
-        }
-    });
+    setTimeout(() => {
+        document.querySelectorAll('.card-machine').forEach((c, i) => {
+            c.classList.remove('machine-selected');
+            if (i === indiceMaquina) {
+                c.classList.add('machine-selected');
+            }
+        });
+    }, 100);
 
     agregarLog(`RONDA ${rondaActual}: ${cartaJugador.name} (ATK: ${cartaJugador.atk}) VS ${cartaMaquina.name} (ATK: ${cartaMaquina.atk})`);
 

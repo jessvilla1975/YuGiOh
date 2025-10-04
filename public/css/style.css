@@ -322,10 +322,7 @@ body::before {
     padding: 5px;
     align-items: start;
     flex: 1;
-    /* AÑADIR esta línea para centrar las cartas de 80% de ancho */
-    justify-items: center; 
-    /* ¡Opcional! Si deseas que se estiren al 100% de su columna: */
-    /* justify-items: stretch; */
+    /* quitar overflow-y: auto; */
 }
 
 .card {
@@ -341,7 +338,7 @@ body::before {
     flex-direction: column;
     justify-content: flex-start;
 
-    width: 100%;   /* 👈 tamaño fijo para uniformidad */
+    width: 80%;   /* 👈 tamaño fijo para uniformidad */
     
 }
 

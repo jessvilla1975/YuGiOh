@@ -1,7 +1,7 @@
 # Yu-Gi-Oh! Duel Game
 ### INTEGRANTES
-Yessica Fernanda Villa Nuñez - 2266301
-Luis Manuel Cardona Trochez - 2059942
+- Yessica Fernanda Villa Nuñez - 2266301
+- Luis Manuel Cardona Trochez - 2059942
 
 ## 📋 Descripción del Proyecto
 

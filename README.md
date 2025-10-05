@@ -7,6 +7,23 @@
 
 Aplicación web interactiva de duelos de Yu-Gi-Oh! desarrollada con CodeIgniter 4. El juego permite a los usuarios enfrentarse contra la máquina en un sistema de mejor de 3 rondas, donde cada jugador selecciona cartas aleatorias obtenidas de la API oficial de Yu-Gi-Oh!
 
+## Explicacion de diseño
+Para el desarrollo del backend del proyecto, hemos utilizado PHP y el framework CodeIgniter, que sigue el patrón MVC (Modelo-Vista-Controlador).  Esta estructura organiza la lógica del juego y el flujo de datos de manera eficaz y clara.  Los controladores, por ejemplo YugiohDuelController.php, se encargan de las solicitudes del usuario, se comunican con los modelos como Card.php para adquirir la información sobre las cartas y retornan respuestas en formato JSON al frontend.  CodeIgniter provee instrumentos para gestionar rutas, validar, asegurar y comunicarse entre capas, lo que posibilita una arquitectura del sistema de duelos que es escalable, eficiente y ordenada.
+El frontend, que se compone de HTML, CSS y JavaScript, brinda una experiencia visual dinámica e inmersiva.  Los estilos que se encuentran en style.css desarrollan un entorno con influencias de Yu-Gi-Oh!, utilizando partículas, animaciones y gradientes que comunican emoción y energía.  El archivo script.js se encarga de la interactividad del jugador, mostrando las cartas, actualizando los resultados de cada ronda y controlando los efectos visuales en función de las acciones.  En su conjunto, la interfaz une una estética atractiva con una respuesta fluida, lo que permite que cada combate sea fácil de jugar, visualmente impresionante e inmersivo.
+
+## Capturas de pantalla
+1. Inicio
+![alt text](image.png)
+2. Carga de cartas
+![alt text](image-1.png)
+3. Vista
+![alt text](image-2.png)
+4. Carta seleccionada - Boton habilitado
+![alt text](image-3.png)
+5. Cartas jugadas - Usuario ganador - Log de batalla
+![alt text](image-4.png)
+6. Aviso de victoria/derrota
+![alt text](image-5.png)
 ### Características Principales
 
 - Sistema de duelo al mejor de 3 rondas
@@ -159,23 +176,8 @@ El proyecto consume la API pública de YGOProDeck:
 - **Arquitectura**: MVC (Model-View-Controller)
 
 
-## Explicacion de diseño
-Para el desarrollo del backend del proyecto, hemos utilizado PHP y el framework CodeIgniter, que sigue el patrón MVC (Modelo-Vista-Controlador).  Esta estructura organiza la lógica del juego y el flujo de datos de manera eficaz y clara.  Los controladores, por ejemplo YugiohDuelController.php, se encargan de las solicitudes del usuario, se comunican con los modelos como Card.php para adquirir la información sobre las cartas y retornan respuestas en formato JSON al frontend.  CodeIgniter provee instrumentos para gestionar rutas, validar, asegurar y comunicarse entre capas, lo que posibilita una arquitectura del sistema de duelos que es escalable, eficiente y ordenada.
-El frontend, que se compone de HTML, CSS y JavaScript, brinda una experiencia visual dinámica e inmersiva.  Los estilos que se encuentran en style.css desarrollan un entorno con influencias de Yu-Gi-Oh!, utilizando partículas, animaciones y gradientes que comunican emoción y energía.  El archivo script.js se encarga de la interactividad del jugador, mostrando las cartas, actualizando los resultados de cada ronda y controlando los efectos visuales en función de las acciones.  En su conjunto, la interfaz une una estética atractiva con una respuesta fluida, lo que permite que cada combate sea fácil de jugar, visualmente impresionante e inmersivo.
 
-## Capturas de pantalla
-1. Inicio
-![alt text](image.png)
-2. Carga de cartas
-![alt text](image-1.png)
-3. Vista
-![alt text](image-2.png)
-4. Carta seleccionada - Boton habilitado
-![alt text](image-3.png)
-5. Cartas jugadas - Usuario ganador - Log de batalla
-![alt text](image-4.png)
-6. Aviso de victoria/derrota
-![alt text](image-5.png)
+
 
 
 Para preguntas o sugerencias, puedes contactar a través de [tu-email@ejemplo.com]
